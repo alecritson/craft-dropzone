@@ -4,6 +4,10 @@ namespace Craft;
 class DropzoneController extends BaseController
 {
 
+	/**
+	 * Action to upload a file to an asset
+	 * @return void Request ends
+	 */
 	public function actionUpload()
 	{
 
@@ -22,11 +26,6 @@ class DropzoneController extends BaseController
 		    AssetConflictResolution::KeepBoth);
 
 		// DropzonePlugin::log($file->getName(), LogLevel::Info);
-		craft()->end();
-	}
-	public function poop($nugget = '')
-	{
-		Craft::dump($nugget);
 		craft()->end();
 	}
 }

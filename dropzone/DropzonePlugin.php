@@ -10,7 +10,7 @@ class DropzonePlugin extends BasePlugin
   }
   function getVersion()
   {
-    return '0.0.0';
+    return '0.1.0';
   }
   function getDeveloper()
   {
@@ -20,17 +20,34 @@ class DropzonePlugin extends BasePlugin
   {
     return 'http://itsalec.co.uk';
   }
-  public function init()
+
+  private function _getThemes()
   {
-    craft()->on('entries.onBeforeSaveEntry', function(Event $event) {
-        $data = craft()->request->getPost();
-
-        $entry = $event->params['entry'];
-
-        $entry->getContent()->title = 'malala';
-        
-        // Craft::dump();
-        // craft()->end();
-    });
+    return array(
+      array(
+        'label' => 'Default',
+        'value' => 'default'
+      )
+    );
+  }
+  /**
+   * @return array
+   */
+  protected function defineSettings()
+  {
+    return array(
+      'useTheme'   => array(AttributeType::Bool, 'default' => false),
+      'dropzoneTheme'      => AttributeType::String,
+    );
+  }
+  /**
+   * @return mixed
+   */
+  public function getSettingsHtml()
+  {
+    return craft()->templates->render('dropzone/_settings', array(
+      'settings' => $this->getSettings(),
+      'themes' => $this->_getThemes()
+    ));
   }
 }

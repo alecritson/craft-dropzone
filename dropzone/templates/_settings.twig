@@ -1,0 +1,18 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.checkboxField({
+	first: true,
+	label: "Include a theme with the dropzone instance?"|t,
+	name: 'useTheme',
+	toggle: 'themes',
+	checked: (settings.useTheme is defined and settings.useTheme is not empty ? true : false),
+}) }}
+
+<div id="themes"{% if settings.useTheme is not defined or not settings.useTheme %} class="hidden"{% endif %}>
+	{{ forms.selectField({
+		label : 'Select theme',
+		name: 'dropzoneTheme',
+		value: settings.dropzoneTheme,
+		options: themes
+	})}}
+</div>

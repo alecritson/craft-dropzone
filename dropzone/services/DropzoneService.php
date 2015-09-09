@@ -1,26 +1,25 @@
 <?php
 /**
- * Placid Cache class
+ * Dropzone class
  *
- * Handles caching of requests and ting
+ * Handles dropzone tasks
  *
  * @author    Alec Ritson. <info@alecritson.co.uk>
  * @copyright Copyright (c) 2015, Alec Ritson.
  * @license   http://buildwithcraft.com/license Craft License Agreement
  * @link      http://itsalec.co.uk
- * @package   craft.plugins.placid.services
- * @since     1.0.0
+ * @package   craft.plugins.dropzone.services
+ * @since     0.1.0
  */
 namespace Craft;
 
 class DropzoneService extends BaseApplicationComponent
 {
-	protected $instance;
-
-	public function uploadAssets()
-	{
-
-	}
+	/**
+	 * Returns our dropzone form to the template
+	 * @param  array  $config An array of settings
+	 * @return String         The resulting HTML form
+	 */
 	public function form($config = array())
 	{	
 		$this->_includeDropzoneResources();
@@ -28,10 +27,15 @@ class DropzoneService extends BaseApplicationComponent
 		$actionUrl = UrlHelper::getActionUrl('dropzone/upload');
 
 		$form = "<form method=\"POST\" enctype=\"multipart/form-data\" class=\"dropzone\" action=\"{$actionUrl}\">";
-	
+
 		if(isset($config['sourceId']))
 		{
 			$form .= "<input type=\"hidden\" name=\"sourceId\" value=\"{$config['sourceId']}\">";
+		}
+
+		if(isset($config['allowAnonymous']))
+		{
+			$form .= "<input type=\"hidden\" name=\"allowAnonymous\" value=\"{$config['allowAnonymous']}\">";
 		}
 
 		$form .= "</form>";
@@ -40,21 +44,23 @@ class DropzoneService extends BaseApplicationComponent
 
 	}
 
+	/**
+	 * Includes our dropzone resources
+	 * @return void
+	 */
 	private function _includeDropzoneResources()
 	{
+
+		$pluginSettings = craft()->plugins->getPlugin('dropzone')->getSettings();
+
 		// Include dropzone
         craft()->templates->includeJsResource('dropzone/js/dropzone.js');
-        craft()->templates->includeCssResource('dropzone/css/dropzone.css');
+
+        if($pluginSettings['useTheme'])
+        {
+        	craft()->templates->includeCssResource('dropzone/css/themes/'. $pluginSettings['dropzoneTheme'] . '.css');
+        }
+        
 	}
 
-	public function poop($nugget)
-	{
-		Craft::dump($nugget);
-		craft()->end();
-	}
-	
-	public function getInstance()
-	{
-		return $this->instance;
-	}
 }
